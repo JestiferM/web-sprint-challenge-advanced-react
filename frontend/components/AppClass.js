@@ -1,20 +1,14 @@
 import axios from 'axios';
 import React from 'react'
 
-class Form extends React.Component{
-render(){
-return(
-  <form>
-  <input id="email" type="email" placeholder="type email"></input>
-  <input id="submit" type="submit"></input>
-  </form>
-)}
-}
 
 export default class AppClass extends React.Component {
 
   state={
-    grid:[],
+    steps:0,
+    message:"Hello World",
+    email:"",
+    index:1,
   };
 
   componentDidMount(){
@@ -30,15 +24,25 @@ export default class AppClass extends React.Component {
   }
 
 
-  handleSubmit = (e) => {
+  handleChange = e => {
     e.preventDefault();
-    console.log('submit')
+    console.log('move')
+    this.setState({
+      ...this.state,
+      steps:this.state.steps + 1
+    })
   }
 
-  handleClear = () => {
-    console.log('click')
-  }
 
+
+  reset = () => {
+    this.setState({
+    steps:0,
+    message:"Hello World",
+    email:"",
+    index:1,
+  })
+  }
 
   render() {
     console.log(this.state)
@@ -46,32 +50,32 @@ export default class AppClass extends React.Component {
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates (2, 2)</h3>
-          <h3 id="steps">You moved 0 times</h3>
-        </div>
-        <div id="grid">
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square active">B</div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-        </div>
-        <div className="info">
-          <h3 id="message"></h3>
-        </div>
-        <div id="keypad">
-          <button onClick={this.handleSubmit} id="left">LEFT</button>
-          <button onClick={this.handleSubmit} id="up">UP</button>
-          <button onClick={this.handleSubmit} id="right">RIGHT</button>
-          <button onClick={this.handleSubmit} id="down">DOWN</button>
-          <button onClick={this.handleClear} id="reset">reset</button>
-        </div>
-
-        <Form/>
+        <h3 id="coordinates">Coordinates (2, 2)</h3>
+        <h3 id="steps">You moved 0 times</h3>
+      </div>
+      <div id="grid">
+        {
+          [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
+            <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
+              {idx === this.state.index ? 'B' : null}
+            </div>
+          ))
+        }
+      </div>
+      <div className="info">
+        <h3 id="message"></h3>
+      </div>
+      <div id="keypad">
+        <button onClick={this.handleChange} id="left">LEFT</button>
+        <button onClick={this.handleChange} id="up">UP</button>
+        <button onClick={this.handleChange} id="right">RIGHT</button>
+        <button onClick={this.handleChange} id="down">DOWN</button>
+        <button  onClick={this.reset} id="reset">reset</button>
+      </div>
+      <form>
+        <input id="email" type="email" placeholder="type email"></input>
+        <input id="submit" type="submit"></input>
+      </form>
       </div>
     )
   }
