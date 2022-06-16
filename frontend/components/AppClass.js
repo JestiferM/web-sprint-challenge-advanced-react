@@ -8,50 +8,72 @@ export default class AppClass extends React.Component {
     steps:0,
     message:"Hello World",
     email:"",
-    index:1,
+    index:4,
+
   };
 
-  componentDidMount(){
-    axios
-    .get("http://localhost:9000/api/result")
-    .then((res) => {
-      this.setState({
-        ...this.state,
-        grid: res.data,
-      });
+  onSubmit = () => {
+    axios.post('http://localhost:9000/api/result', {email:this.state.email})
+    .then(res => {
+      console.log(res)
     })
-    .catch((err) => console.log({ err }));
+    .catch(err => console.log({err}))
   }
 
-
-  handleChange = e => {
-    e.preventDefault();
-    console.log('move')
+  handleLeft =  () => {
+    console.log('move');
     this.setState({
       ...this.state,
-      steps:this.state.steps + 1
+      steps:this.state.steps + 1,
+      index:this.state.index + 1 
     })
   }
 
+  handleDown = () => {
+    console.log('move');
+    this.setState({
+      ...this.state,
+      steps:this.state.steps + 1,
+      index:this.state.index + 1
+    })
+  }
 
+  handleRight = () => {
+    console.log('move');
+    this.setState({
+      ...this.state,
+      steps:this.state.steps + 1,
+      index:this.state.index - 1
+    })
+  }
+  handleUp = () => {
+    console.log('move');
+    this.setState({
+      ...this.state,
+      steps:this.state.steps + 1,
+      index:this.state.index + 1
+    })
 
+  }
   reset = () => {
+    console.log(this.state.message)
     this.setState({
     steps:0,
     message:"Hello World",
     email:"",
-    index:1,
+    index:4,
   })
   }
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     const { className } = this.props
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-        <h3 id="coordinates">Coordinates (2, 2)</h3>
-        <h3 id="steps">You moved 0 times</h3>
+        <h3 id="coordinates">Coordinates {this.state.index}</h3>
+        <h3 id="steps">You moved {this.state.steps} times</h3>
+
       </div>
       <div id="grid">
         {
@@ -66,14 +88,14 @@ export default class AppClass extends React.Component {
         <h3 id="message"></h3>
       </div>
       <div id="keypad">
-        <button onClick={this.handleChange} id="left">LEFT</button>
-        <button onClick={this.handleChange} id="up">UP</button>
-        <button onClick={this.handleChange} id="right">RIGHT</button>
-        <button onClick={this.handleChange} id="down">DOWN</button>
+        <button onClick={this.handleLeft} id="left">LEFT</button>
+        <button onClick={this.handleUp} id="up">UP</button>
+        <button onClick={this.handleRight} id="right">RIGHT</button>
+        <button onClick={this.handleDown} id="down">DOWN</button>
         <button  onClick={this.reset} id="reset">reset</button>
       </div>
       <form>
-        <input id="email" type="email" placeholder="type email"></input>
+        <input onChange={this.onSubmit} value={this.state.email} id="email" type="email" placeholder="type email"></input>
         <input id="submit" type="submit"></input>
       </form>
       </div>
