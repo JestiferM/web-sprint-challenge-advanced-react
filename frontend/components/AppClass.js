@@ -9,69 +9,98 @@ export default class AppClass extends React.Component {
     message:"Hello World",
     email:"",
     index:4,
+    x:2,
+    y:2,
   };
 
-  // onSubmit = () => {
-  //   axios.post('http://localhost:9000/api/result', {email:this.state.email})
-  //   .then(res => {
-  //     console.log(res)
-  //   })
-  //   .catch(err => console.log({err}))
-  // }
-
-
   handleLeft =  () => {
-    console.log('move');
+    if(this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
+      this.setState({
+        ...this.state,
+        message:"You can't go left!"
+      })
+    }else {
+       console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index - 1 
+      index:this.state.index - 1,
+      message:'',
+      y:this.state.y - 1
     })
+    }
   }
 
   handleDown = () => {
-    console.log('move');
+    if(this.state.index < 6 ){
+      console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index + 3 
+      index:this.state.index + 3,
+      message:"",
+      x:this.state.x + 1, 
     })
+    }else {
+      this.setState({
+        ...this.state,
+        message:"You cant go down!"
+      })
+    }
   }
 
   handleRight = () => {
-    console.log('move');
+    if(this.state.index === 2 || this.state.index === 5 || this.state.index === 8) {
+      this.setState({
+        ...this.state,
+        message:"You can't go right!"
+      })
+    }else {
+       console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index + 1 
+      index:this.state.index + 1 ,
+      message:'',
+      y:this.state.y + 1
     })
+    }
   }
-  handleUp = () => {
-    console.log('move');
-    this.setState({
-      ...this.state,
-      steps:this.state.steps + 1,
-      index:this.state.index - 3
-    })
 
+  handleUp = () => {
+    if(this.state.index > 2 ){
+      console.log('move');
+  this.setState({
+    ...this.state,
+    steps:this.state.steps + 1,
+    index:this.state.index - 3,
+    x:this.state.x -1,
+  })
+    }else {
+      this.setState({
+        ...this.state,
+        message:"You can't go up!"
+      })
+    }
   }
   reset = () => {
-    console.log(this.state.message)
     this.setState({
     steps:0,
-    message:"Hello World",
+    message:"",
     email:"",
     index:4,
+    x:2,
+    y:2
   })
   }
 
   render() {
-    // console.log(this.state)
+    console.log(this.state)
     const { className } = this.props
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-        <h3 id="coordinates">Coordinates {this.state.index}</h3>
+        <h3 id="coordinates">Coordinates ({this.state.x} , {this.state.y})</h3>
         <h3 id="steps">You moved {this.state.steps} times</h3>
 
       </div>
@@ -85,7 +114,7 @@ export default class AppClass extends React.Component {
         }
       </div>
       <div className="info">
-        <h3 id="message"></h3>
+        <h3 id="message">{this.state.message}</h3>
       </div>
       <div id="keypad">
         <button onClick={this.handleLeft} id="left">LEFT</button>
@@ -95,7 +124,7 @@ export default class AppClass extends React.Component {
         <button onClick={this.reset} id="reset">reset</button>
       </div>
       <form>
-        <input onChange={this.onSubmit} value={this.state.input} id="email" type="email" placeholder="type email"></input>
+        <input value={this.state.input} id="email" type="email" placeholder="type email"></input>
         <input id="submit" type="submit"></input>
       </form>
       </div>
