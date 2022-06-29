@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import React from 'react'
 
 
@@ -9,23 +9,23 @@ export default class AppClass extends React.Component {
     message:"Hello World",
     email:"",
     index:4,
-
   };
 
-  onSubmit = () => {
-    axios.post('http://localhost:9000/api/result', {email:this.state.email})
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => console.log({err}))
-  }
+  // onSubmit = () => {
+  //   axios.post('http://localhost:9000/api/result', {email:this.state.email})
+  //   .then(res => {
+  //     console.log(res)
+  //   })
+  //   .catch(err => console.log({err}))
+  // }
+
 
   handleLeft =  () => {
     console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index + 1 
+      index:this.state.index - 1 
     })
   }
 
@@ -34,7 +34,7 @@ export default class AppClass extends React.Component {
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index + 1
+      index:this.state.index + 3 
     })
   }
 
@@ -43,7 +43,7 @@ export default class AppClass extends React.Component {
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index - 1
+      index:this.state.index + 1 
     })
   }
   handleUp = () => {
@@ -51,7 +51,7 @@ export default class AppClass extends React.Component {
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
-      index:this.state.index + 1
+      index:this.state.index - 3
     })
 
   }
@@ -92,10 +92,10 @@ export default class AppClass extends React.Component {
         <button onClick={this.handleUp} id="up">UP</button>
         <button onClick={this.handleRight} id="right">RIGHT</button>
         <button onClick={this.handleDown} id="down">DOWN</button>
-        <button  onClick={this.reset} id="reset">reset</button>
+        <button onClick={this.reset} id="reset">reset</button>
       </div>
       <form>
-        <input onChange={this.onSubmit} value={this.state.email} id="email" type="email" placeholder="type email"></input>
+        <input onChange={this.onSubmit} value={this.state.input} id="email" type="email" placeholder="type email"></input>
         <input id="submit" type="submit"></input>
       </form>
       </div>
