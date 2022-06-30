@@ -1,4 +1,5 @@
 
+import axios from 'axios';
 import React from 'react'
 
 
@@ -6,12 +7,31 @@ export default class AppClass extends React.Component {
 
   state={
     steps:0,
-    message:"Hello World",
+    message:"",
     email:"",
     index:4,
     x:2,
     y:2,
   };
+
+
+  handleChange = (e) => {
+    this.setState({...this.state, email: e.target.value})
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    axios.post('http://localhost:9000/api/result', {email:"jessy@gmail.com", x:"2", y:"2", steps:"0"})
+    .then(res => {
+      console.log(res)
+      this.setState({
+        ...this.state,
+        message:res.data.message,
+        email:''
+      })
+    })
+    .catch(err => console.log({err}))
+  }
 
   handleLeft =  () => {
     if(this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
@@ -20,7 +40,6 @@ export default class AppClass extends React.Component {
         message:"You can't go left!"
       })
     }else {
-       console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
@@ -33,7 +52,6 @@ export default class AppClass extends React.Component {
 
   handleDown = () => {
     if(this.state.index < 6 ){
-      console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
@@ -56,7 +74,6 @@ export default class AppClass extends React.Component {
         message:"You can't go right!"
       })
     }else {
-       console.log('move');
     this.setState({
       ...this.state,
       steps:this.state.steps + 1,
@@ -69,7 +86,6 @@ export default class AppClass extends React.Component {
 
   handleUp = () => {
     if(this.state.index > 2 ){
-      console.log('move');
   this.setState({
     ...this.state,
     steps:this.state.steps + 1,
@@ -124,8 +140,8 @@ export default class AppClass extends React.Component {
         <button onClick={this.reset} id="reset">reset</button>
       </div>
       <form>
-        <input value={this.state.input} id="email" type="email" placeholder="type email"></input>
-        <input id="submit" type="submit"></input>
+        <input onChange={this.handleChange} value={this.state.email} id="email" type="email" placeholder="type email"></input>
+        <input onClick={this.onSubmit} id="submit" type="submit"></input>
       </form>
       </div>
     )
