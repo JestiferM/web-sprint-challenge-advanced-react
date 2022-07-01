@@ -19,25 +19,36 @@ export default class AppClass extends React.Component {
     this.setState({...this.state, email: e.target.value})
   }
 
-  onSubmit = (e) => {
+onSubmit = (e) => {   
     e.preventDefault();
-    axios.post('http://localhost:9000/api/result', {email:"jessy@gmail.com", x:"2", y:"2", steps:"0"})
-    .then(res => {
-      console.log(res)
+    if(this.state.steps === 0){
       this.setState({
         ...this.state,
-        message:res.data.message,
-        email:''
+        message:"Ouch:email is required"
       })
+    } else {
+      axios.post('http://localhost:9000/api/result', {email:this.state.email, y:this.state.x, x:this.state.y, steps:this.state.steps})
+      .then(res => {
+        this.setState({
+          ...this.state,
+          message:res.data.message,
+          email:"",
+        })
+      })
+      .catch(err => { 
+        this.setState({
+          ...this.state,
+          message:err.response.data.message
+        })
     })
-    .catch(err => console.log({err}))
+    }
   }
 
   handleLeft =  () => {
     if(this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
       this.setState({
         ...this.state,
-        message:"You can't go left!"
+        message:"You can't go left"
       })
     }else {
     this.setState({
@@ -62,7 +73,7 @@ export default class AppClass extends React.Component {
     }else {
       this.setState({
         ...this.state,
-        message:"You cant go down!"
+        message:"You can't go down"
       })
     }
   }
@@ -71,7 +82,7 @@ export default class AppClass extends React.Component {
     if(this.state.index === 2 || this.state.index === 5 || this.state.index === 8) {
       this.setState({
         ...this.state,
-        message:"You can't go right!"
+        message:"You can't go right"
       })
     }else {
     this.setState({
@@ -95,7 +106,7 @@ export default class AppClass extends React.Component {
     }else {
       this.setState({
         ...this.state,
-        message:"You can't go up!"
+        message:"You can't go up"
       })
     }
   }
@@ -111,13 +122,12 @@ export default class AppClass extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     const { className } = this.props
     return (
       <div id="wrapper" className={className}>
         <div className="info">
         <h3 id="coordinates">Coordinates ({this.state.y} , {this.state.x})</h3>
-        <h3 id="steps">You moved {this.state.steps} times</h3>
+        <h3 id="steps">{`You moved ${this.state.steps} ${this.state.steps === 1 ? 'time' : 'times' }`}</h3>
 
       </div>
       <div id="grid">

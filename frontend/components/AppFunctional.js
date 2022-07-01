@@ -19,23 +19,35 @@ export default function AppFunctional(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:9000/api/result', {email:"jessy@gmail.com", x:"2", y:"2", steps:"0"})
-    .then(res => {
-      console.log(res)
+    if(state.steps === 0){
       setState({
         ...state,
-        message:res.data.message,
-        email:''
+        message:"Ouch:email is required"
+      })
+    } else {
+      axios.post('http://localhost:9000/api/result', {email:state.email, x:state.y, y:state.x, steps:state.steps})
+      .then(res => {
+        setState({
+          ...state,
+          message:res.data.message,
+          email:'',
+        })
+      })
+      .catch(err => 
+      {
+      setState({
+        ...state,
+        message:err.response.data.message
       })
     })
-    .catch(err => console.log({err}))
+    }
   }
 
   const handleLeft =  () => {
     if(state.index === 0 || state.index === 3 || state.index === 6) {
       setState({
         ...state,
-        message:"You can't go left!"
+        message:"You can't go left"
       })
     }else {
     setState({
@@ -60,7 +72,7 @@ export default function AppFunctional(props) {
     }else {
       setState({
         ...state,
-        message:"You cant go down!"
+        message:"You can't go down"
       })
     }
   }
@@ -69,7 +81,7 @@ export default function AppFunctional(props) {
     if(state.index === 2 || state.index === 5 || state.index === 8) {
       setState({
         ...state,
-        message:"You can't go right!"
+        message:"You can't go right"
       })
     }else {
     setState({
@@ -93,7 +105,7 @@ export default function AppFunctional(props) {
     }else {
       setState({
         ...state,
-        message:"You can't go up!"
+        message:"You can't go up"
       })
     }
   }
@@ -112,7 +124,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates ({state.y} , {state.x})</h3>
-        <h3 id="steps">You moved {state.steps} times</h3>
+        <h3 id="steps">{`You moved ${state.steps} ${state.steps === 1 ? 'time' : 'times' }`}</h3>
 
       </div>
       <div id="grid">
